@@ -24,7 +24,7 @@ parser.add_argument('--remove_doubles', type=bool, default=True,
                     help='Remove double vertices to improve mesh quality.')
 parser.add_argument('--edge_split', type=bool, default=True,
                     help='Adds edge split filter.')
-parser.add_argument('--depth_scale', type=float, default=1.4,
+parser.add_argument('--depth_scale', type=float, default=1,
                     help='Scaling that is applied to depth. Depends on size of mesh. Try out various values until you get a good result. Ignored if format is OPEN_EXR.')
 parser.add_argument('--color_depth', type=str, default='8',
                     help='Number of bit per channel used for output. Either 8 or 16.')
@@ -156,6 +156,9 @@ bpy.ops.import_scene.obj(filepath=args.obj)
 
 obj = bpy.context.selected_objects[0]
 context.view_layer.objects.active = obj
+#NOTE: centering
+bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_MASS', center='BOUNDS')
+bpy.context.object.location = (0, 0, 0)
 
 # Possibly disable specular shading
 for slot in obj.material_slots:
@@ -211,6 +214,9 @@ cam.parent = cam_empty
 scene.collection.objects.link(cam_empty)
 context.view_layer.objects.active = cam_empty
 cam_constraint.target = cam_empty
+#NOTE: centering
+bpy.ops.object.constraint_add(type='TRACK_TO')
+cam_empty.constraints["Track To"].target = bpy.context.view_layer.objects.active
 
 stepsize = 360.0 / args.views
 rotation_mode = 'XYZ'

@@ -24,7 +24,7 @@ parser.add_argument('--remove_doubles', type=bool, default=True,
                     help='Remove double vertices to improve mesh quality.')
 parser.add_argument('--edge_split', type=bool, default=True,
                     help='Adds edge split filter.')
-parser.add_argument('--depth_scale', type=float, default=1,
+parser.add_argument('--depth_scale', type=float, default=1, # 1 has the best result for the depth map in modelnet40 
                     help='Scaling that is applied to depth. Depends on size of mesh. Try out various values until you get a good result. Ignored if format is OPEN_EXR.')
 parser.add_argument('--color_depth', type=str, default='8',
                     help='Number of bit per channel used for output. Either 8 or 16.')
@@ -231,8 +231,8 @@ for i in range(0, args.views):
 
     scene.render.filepath = render_file_path
     depth_file_output.file_slots[0].path = render_file_path + "_depth"
-    normal_file_output.file_slots[0].path = render_file_path + "_normal"
-    albedo_file_output.file_slots[0].path = render_file_path + "_albedo"
+    # normal_file_output.file_slots[0].path = render_file_path + "_normal"
+    # albedo_file_output.file_slots[0].path = render_file_path + "_albedo"
     id_file_output.file_slots[0].path = render_file_path + "_id"
 
     bpy.ops.render.render(write_still=True)  # render still
